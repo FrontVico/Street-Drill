@@ -72,7 +72,7 @@
           const totalProdutos = cart.reduce((sum, item) => sum + item.price, 0);
           const total = totalProdutos + totalFrete;
   
-          cartSummaryContainer.innerHTML = `
+          cartSummaryContainer.innerHTML = ` 
               <p><strong>Subtotal: R$ ${totalProdutos.toFixed(2)}</strong></p>
               <p><strong>Frete: R$ ${totalFrete.toFixed(2)}</strong></p>
               <p><strong>Total: R$ ${total.toFixed(2)}</strong></p>
@@ -112,7 +112,6 @@
       }
   
       function calcularFrete(cep) {
-          // Verifica se o CEP é do estado de São Paulo (prefixo 01 a 19)
           if (cep.startsWith("01") || cep.startsWith("02") || cep.startsWith("03") || cep.startsWith("04") || cep.startsWith("05") || cep.startsWith("06") || cep.startsWith("07") || cep.startsWith("08") || cep.startsWith("09") || cep.startsWith("10") || cep.startsWith("11") || cep.startsWith("12") || cep.startsWith("13") || cep.startsWith("14") || cep.startsWith("15") || cep.startsWith("16") || cep.startsWith("17") || cep.startsWith("18") || cep.startsWith("19")) {
               frete = 15.00; // Frete para SP
           } else {
@@ -124,72 +123,70 @@
       document.addEventListener('DOMContentLoaded', () => renderCartSummary(frete));
   
       document.getElementById('checkout-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+        event.preventDefault();
 
-    const nome = document.getElementById('nome').value;
-    const endereco = document.getElementById('endereco').value;
-    const email = document.getElementById('email').value;
+        const nome = document.getElementById('nome').value;
+        const endereco = document.getElementById('endereco').value;
+        const email = document.getElementById('email').value;
 
-    // Verifica se todos os campos obrigatórios estão preenchidos
-    if (!nome || !endereco || !email || cart.length === 0) {
-        alert("Todos os campos são obrigatórios.");
-        return;  // Impede o envio do formulário caso algum campo esteja vazio
-    }
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        if (!nome || !endereco || !email || cart.length === 0) {
+            alert("Todos os campos são obrigatórios.");
+            return;
+        }
 
-    const total = cart.reduce((sum, item) => sum + item.price, 0) + frete;
+        const total = cart.reduce((sum, item) => sum + item.price, 0) + frete;
 
-    // Log dos dados a serem enviados
-    console.log('Dados a serem enviados para o servidor:', {
-        amount: total,
-        nomeCliente: nome,
-        endereco,
-        email,
-        cart: cart
-    });
-
-    // Enviar os dados para o servidor
-    fetch('http://localhost:3000/process-payment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+        // Log dos dados a serem enviados
+        console.log('Dados a serem enviados para o servidor:', {
             amount: total,
             nomeCliente: nome,
             endereco,
             email,
             cart: cart
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Resposta do servidor:', data);  // Log para verificar a resposta
-        if (data.status === 'Aprovado') {
-            const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
-            const novaCompra = {
+        });
+
+        // Enviar os dados para o servidor
+        fetch('https://apitcc-livid.vercel.app/process-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: total,
                 nomeCliente: nome,
                 endereco,
                 email,
-                itens: cart,
-                data: new Date().toLocaleString()
-            };
+                cart: cart
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Resposta do servidor:', data);  // Log para verificar a resposta
+            if (data.status === 'Aprovado') {
+                const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
+                const novaCompra = {
+                    nomeCliente: nome,
+                    endereco,
+                    email,
+                    itens: cart,
+                    data: new Date().toLocaleString()
+                };
 
-            comprasRecentes.push(novaCompra);
-            localStorage.setItem('comprasRecentes', JSON.stringify(comprasRecentes));
-            localStorage.removeItem('cart');
-            alert('Compra bem-sucedida!');
-            window.location.href = '../index.html';
-
-          } else {
-            alert('Pagamento não aprovado!');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao processar o pagamento:', error);
-        alert('Ocorreu um erro ao processar o pagamento.');
+                comprasRecentes.push(novaCompra);
+                localStorage.setItem('comprasRecentes', JSON.stringify(comprasRecentes));
+                localStorage.removeItem('cart');
+                alert('Compra bem-sucedida!');
+                window.location.href = '../index.html';
+            } else {
+                alert('Pagamento não aprovado!');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao processar o pagamento:', error);
+            alert('Ocorreu um erro ao processar o pagamento.');
+        });
     });
-});
     </script>
-
 </body>
 </html>
