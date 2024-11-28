@@ -99,25 +99,16 @@ h1 {
 }
 
 .image-container {
-  position: relative; /* Posicionamento relativo para facilitar a troca de imagens */
-  width: 350px; /* Defina uma largura fixa para todas as imagens */
-  height: 350px; /* Defina uma altura fixa para manter o padrão visual */
-  display: flex; 
-  justify-content: center; /* Centraliza as imagens horizontalmente */
-  align-items: center; /* Centraliza as imagens verticalmente */
-  overflow: hidden; /* Oculta o excesso de imagem que ultrapassar o contêiner */
-  margin-top: 20px;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 10px;
 }
-
 .product-image {
-  width: 100%; /* Ajuste para 100% do contêiner */
-  height: 100%; /* Preenche toda a altura */
-  object-fit: cover; /* Preenche o espaço mantendo proporções */
-  position: absolute; /* Posicionamento absoluto para facilitar a alternância */
-  transition: opacity 0.5s ease-in-out; /* Suaviza a transição entre as imagens */
-  border-radius: 22px;
+  height: auto;
+  border-radius: 25px;
 }
-
 .hidden {
   opacity: 0; /* Define opacidade zero para esconder a imagem */
 }
