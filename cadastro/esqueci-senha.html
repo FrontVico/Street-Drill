@@ -26,17 +26,20 @@
         Parse.serverURL = 'https://parseapi.back4app.com/';
 
         document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita o envio do formulário
+    event.preventDefault(); // Evita o envio do formulário
 
-            const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value;
 
-            // Envia o email de redefinição de senha
-            Parse.User.requestPasswordReset(email).then(() => {
-                alert('Email de redefinição de senha enviado com sucesso!');
-            }).catch((error) => {
-                alert(`Erro: ${error.message}`);
-            });
-        });
+    // Verifica o envio do e-mail
+    Parse.User.requestPasswordReset(email)
+    .then(() => {
+        alert('Email de redefinição de senha enviado com sucesso!');
+    })
+    .catch((error) => {
+        console.error('Erro no envio do e-mail:', error);
+        alert(`Erro: ${error.code} - ${error.message}`);
+    });
+});
     </script>
 </body>
 </html>

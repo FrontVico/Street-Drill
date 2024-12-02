@@ -62,15 +62,12 @@
     </div>
 
     <script>
-        // Função para verificar login e redirecionar para finalizar compra
         function finalizarCompra() {
             const user = JSON.parse(localStorage.getItem('currentUser'));
 
             if (!user) {
-                // Se não houver dados do usuário, redireciona para a página de login
                 window.location.href = '../cadastro/login.html';
             } else {
-                // Se o usuário estiver logado, redireciona para a página de finalização de compra
                 window.location.href = './finalizar-compra.html';
             }
         }
