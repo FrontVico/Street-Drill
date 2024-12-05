@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (!currentUser) {
         alert('Você não está logado. Redirecionando para a página de login.');
-        window.location.href = '../pages/login.html';
+        window.location.href = '../cadastro/Login.html';
         return;
     }
 
